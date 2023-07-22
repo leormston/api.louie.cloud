@@ -1,0 +1,21 @@
+name: Update lambda
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update_lambda:
+    name: 'Pull code & update lambda'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: zip lambda.zip main.py
+      - uses: stcalica/update-lambda@0.0.2
+        with:
+          package: lambda.zip
+          function-name: api-louie-cloud
+          AWS_REGION: eu-west-1
+          AWS_SECRET_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
